@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} Home Page{% endblock %}
+
+
+{% block body %}
+
+<h1>Home Page</h1>
+
+<div class="sign-div">
+  <a action="/login" href="{{url_for('sign_up') }}">
+    <button class="join-button">
+      Sign Up 
+    </button>
+  </a>
+</div>
+
+<div class="log-div">
+  <a action="/login" href="{{url_for('login') }}">
+    <button class="join-button">
+      Login 
+    </button>
+  </a>
+</div>
+
+{% endblock %}
