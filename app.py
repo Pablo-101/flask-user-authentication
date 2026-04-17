@@ -26,7 +26,7 @@ def login():
         password = request.form.get("password")
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
-            session["user"] = username
+            session["user"] = user.id
             flash("Logged in Successfully!", "success")
             return redirect(url_for("dashboard"))
         else:
@@ -51,7 +51,7 @@ def sign_up():
             user = User(username=username, password=password)
             db.session.add(user)
             db.session.commit()
-            session["user"] = username
+            session["user"] = user.id
             flash("Account has been successfully created", "success")
             return redirect(url_for("dashboard"))
         else:
@@ -74,14 +74,18 @@ def dashboard():
         return redirect(url_for("login"))
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET", "POST"])
 def logout():
     if "user" in session:
-        session.pop("user", None)
-        flash("Logged Out", "success")
-        return redirect(url_for("login"))
+        if request.method == "POST":
+            session.pop("user", None)
+            flash("Logged Out", "success")
+            return redirect(url_for("login"))
 
+        else:
+            return redirect(url_for("dashboard"))
     else:
+        flash("You already Logged Out", "success")
         return render_template("home.html")
 
 
