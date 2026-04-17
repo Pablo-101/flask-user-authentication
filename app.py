@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./user_pass.db"
@@ -25,7 +26,7 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
         user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
+        if user and check_password_hash(user.password, password):
             session["user"] = user.id
             flash("Logged in Successfully!", "success")
             return redirect(url_for("dashboard"))
@@ -45,7 +46,7 @@ def login():
 def sign_up():
     if request.method == "POST":
         username = request.form.get("username")
-        password = request.form.get("password")
+        password = generate_password_hash(request.form.get("password"))
         user = User.query.filter_by(username=username).first()
         if not user:
             user = User(username=username, password=password)
@@ -67,8 +68,8 @@ def sign_up():
 @app.route("/dashboard")
 def dashboard():
     if "user" in session:
-        username = session["user"]
-        return render_template("dashboard.html", username=username)
+        user = User.query.get(session["user"])
+        return render_template("dashboard.html", username=user.username)
     else:
         flash("Login first", "warning")
         return redirect(url_for("login"))
