@@ -1,25 +1,17 @@
-from flask import Flask, render_template, session, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
+from flask import render_template, session, request, redirect, url_for, flash, Blueprint
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.models.user import User
+from app import db
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./user_pass.db"
-db = SQLAlchemy(app)
-app.secret_key = "123"
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
+auth_bp = Blueprint("auth", __name__)
 
 
-@app.route("/")
+@auth_bp.route("/")
 def home():
     return render_template("home.html")
 
 
-@app.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
 
     if request.method == "POST":
@@ -29,20 +21,20 @@ def login():
         if user and check_password_hash(user.password, password):
             session["user"] = user.id
             flash("Logged in Successfully!", "success")
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("auth.dashboard"))
         else:
             flash("Username or Password is Incorrect", "danger")
-            return redirect(url_for("login"))
+            return redirect(url_for("auth.login"))
 
     else:
         if "user" in session:
             flash("You already logged in", "info")
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("auth.dashboard"))
 
         return render_template("login.html")
 
 
-@app.route("/sign_up", methods=["GET", "POST"])
+@auth_bp.route("/sign_up", methods=["GET", "POST"])
 def sign_up():
     if request.method == "POST":
         username = request.form.get("username")
@@ -54,43 +46,37 @@ def sign_up():
             db.session.commit()
             session["user"] = user.id
             flash("Account has been successfully created", "success")
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("auth.dashboard"))
         else:
             flash("Username already exists!", "danger")
-            return redirect(url_for("login"))
+            return redirect(url_for("auth.login"))
     else:
         if "user" in session:
             flash("You already logged in", "info")
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("auth.dashboard"))
         return render_template("sign_up.html")
 
 
-@app.route("/dashboard")
+@auth_bp.route("/dashboard")
 def dashboard():
     if "user" in session:
         user = User.query.get(session["user"])
         return render_template("dashboard.html", username=user.username)
     else:
         flash("Login first", "warning")
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
 
-@app.route("/logout", methods=["GET", "POST"])
+@auth_bp.route("/logout", methods=["GET", "POST"])
 def logout():
     if "user" in session:
         if request.method == "POST":
             session.pop("user", None)
             flash("Logged Out", "success")
-            return redirect(url_for("login"))
+            return redirect(url_for("auth.login"))
 
         else:
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("auth.dashboard"))
     else:
         flash("You already Logged Out", "success")
         return render_template("home.html")
-
-
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    app.run(host="0.0.0.0", debug=True)
