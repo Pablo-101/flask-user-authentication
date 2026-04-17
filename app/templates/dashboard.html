@@ -12,4 +12,8 @@
 <form method="post" action="{{ url_for('auth.logout')}}">
   <button type="submit" class="link-button">Log out</button>
 </form>
+
+<form method="post" action="{{ url_for('auth.delete')}}">
+  <button type="submit" class="link-button">Delete account</button>
+</form>
 {% endblock %}

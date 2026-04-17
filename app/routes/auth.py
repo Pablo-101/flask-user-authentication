@@ -80,3 +80,22 @@ def logout():
     else:
         flash("You already Logged Out", "success")
         return render_template("home.html")
+
+
+@auth_bp.route("/delete", methods=["GET", "POST"])
+def delete():
+    if "user" in session:
+        user_id = session["user"]
+        user = User.query.filter_by(id=user_id).first()
+        if request.method == "POST":
+            db.session.delete(user)
+            db.session.commit()
+            session.pop("user", None)
+            flash("Account deleted successfully", "success")
+            return redirect(url_for("auth.home"))
+        else:
+            return redirect(url_for("auth.dashboard"))
+
+    else:
+        flash("You need to login first", "warning")
+        return redirect(url_for("auth.login"))
