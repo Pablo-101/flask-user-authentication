@@ -1,19 +1,92 @@
 {% extends "base.html" %}
-{% block title %} Dashboard {% endblock %}
+{% block title %}Dashboard - MyApp{% endblock %}
 
+{% block style %}
+<style>
+    .dashboard-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border: 1px solid var(--color-border);
+        border-radius: 1rem;
+        background-color: var(--color-bg-light);
+    }
+
+    .dashboard-header {
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .welcome-text {
+        font-size: 1.125rem;
+        color: var(--color-text-secondary);
+    }
+
+    .dashboard-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .action-form {
+        margin: 0;
+    }
+
+    .action-btn {
+        width: 100%;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-logout {
+        background-color: var(--color-accent);
+        color: white;
+    }
+
+    .btn-logout:hover {
+        background-color: var(--color-accent-dark);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-delete {
+        background-color: transparent;
+        color: #dc2626;
+        border: 1.5px solid #fecaca;
+    }
+
+    .btn-delete:hover {
+        background-color: rgba(220, 38, 38, 0.05);
+        border-color: #dc2626;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Welcome Back!</h1>
+        <p class="welcome-text">Hello, <strong>{{ username }}</strong></p>
+    </div>
 
-<h1>Dashboard</h1>
+    <div class="dashboard-actions">
+        <form method="post" action="{{ url_for('auth.logout') }}" class="action-form">
+            <button type="submit" class="action-btn btn-logout">Sign Out</button>
+        </form>
 
-<p>
-  welcome {{username}}
-</p>
-<form method="post" action="{{ url_for('auth.logout')}}">
-  <button type="submit" class="link-button">Log out</button>
-</form>
-
-<form method="post" action="{{ url_for('auth.delete')}}">
-  <button type="submit" class="link-button">Delete account</button>
-</form>
+        <form method="post" action="{{ url_for('auth.delete') }}" class="action-form" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+            <button type="submit" class="action-btn btn-delete">Delete Account</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

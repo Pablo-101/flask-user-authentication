@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyApp - Modern Login Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Optional: Additional animations for index page */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .card {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- HEADER / NAVIGATION -->
+    <header>
+        <nav>
+            <div class="logo">MyApp</div>
+            <ul class="nav-menu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm">Login</a>
+                <a href="{{ url_for('auth.sign_up') }}" class="btn btn-primary btn-sm">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to MyApp</h1>
+                <p class="hero-subtitle">
+                    A modern, minimalist platform for secure authentication and user management.
+                    Simple, elegant, and built with you in mind.
+                </p>
+                <div class="hero-actions">
+                    <a href="{{ url_for('auth.sign_up') }}" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="#features" class="btn btn-ghost btn-lg">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section id="features" class="section">
+            <div class="section-title">
+                <h2>Why Choose MyApp?</h2>
+                <p>Everything you need for seamless user authentication and management.</p>
+            </div>
+
+            <div class="grid grid-3">
+                <!-- Feature Card 1 -->
+                <div class="card">
+                    <div class="card-icon">🔐</div>
+                    <h3>Secure Authentication</h3>
+                    <p>
+                        Industry-standard security protocols protect your account with
+                        encryption and secure password management.
+                    </p>
+                </div>
+
+                <!-- Feature Card 2 -->
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>
+                        Optimized performance ensures quick login and signup flows.
+                        No delays, no frustration—just instant access.
+                    </p>
+                </div>
+
+                <!-- Feature Card 3 -->
+                <div class="card">
+                    <div class="card-icon">🎨</div>
+                    <h3>Clean Design</h3>
+                    <p>
+                        Minimalist interface with intuitive navigation. Beautiful,
+                        responsive, and accessible on all devices.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADDITIONAL BENEFITS SECTION -->
+        <section id="about" class="section">
+            <div class="section-title">
+                <h2>Built for You</h2>
+                <p>Designed with user experience at the core.</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <h3>Mobile Responsive</h3>
+                    <p>
+                        Perfect experience on desktop, tablet, or mobile. Our responsive design
+                        adapts seamlessly to any screen size.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>Global Access</h3>
+                    <p>
+                        Access your account from anywhere in the world. Fast, reliable,
+                        and always available when you need it.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <h3>User Focused</h3>
+                    <p>
+                        Simple workflows that respect your time. No unnecessary steps,
+                        just straightforward account management.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">✨</div>
+                    <h3>Modern Stack</h3>
+                    <p>
+                        Built with cutting-edge technology and best practices. Reliable,
+                        maintainable, and future-proof.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALL TO ACTION SECTION -->
+        <section class="cta-section">
+            <h2>Ready to Get Started?</h2>
+            <p>
+                Join thousands of users who trust MyApp for secure, seamless authentication.
+                Create your account today and experience the difference.
+            </p>
+            <a href="{{ url_for('auth.sign_up') }}" class="btn btn-lg cta-button">Sign Up Now</a>
+        </section>
+
+        <!-- ADDITIONAL INFO SECTION -->
+        <section id="contact" class="section">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Three simple steps to get you up and running.</p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <h3>1. Create Account</h3>
+                    <p>
+                        Sign up with your email address and a secure password.
+                        We'll send you a verification link to confirm your identity.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>2. Verify & Secure</h3>
+                    <p>
+                        Verify your email address and set up your profile.
+                        Your account is protected with industry-standard encryption.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>3. Start Using</h3>
+                    <p>
+                        Log in and start using MyApp immediately.
+                        Enjoy seamless access with just your email and password.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <!-- Company Info -->
+                <div class="footer-section">
+                    <h4>MyApp</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+
+                <!-- Product -->
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Roadmap</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                        <li><a href="#">Status Page</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 MyApp. All rights reserved.
+                </p>
+                <div class="footer-social">
+                    <a href="#" title="Twitter">𝕏</a>
+                    <a href="#" title="LinkedIn">in</a>
+                    <a href="#" title="GitHub">◊</a>
+                    <a href="#" title="Facebook">f</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optional: Simple JavaScript for header shadow on scroll -->
+    <script>
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 0) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

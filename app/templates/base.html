@@ -1,38 +1,76 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MyApp{% endblock %}</title>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
     {% block style %}
     {% endblock %}
-  </head>
-  <body>
-    <nav>
-      <ul>
-        <li class="brand">MyApp</li>
-        <li><a href="{{ url_for('auth.home') }}">Home</a></li>
-        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-        <li><a href="{{ url_for('auth.sign_up') }}">Sign Up</a></li>
-      </ul>
-    </nav>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">
-            {{ message }}
-            <button type="button" class="close" onclick="this.parentElement.style.display='none';">&times;</button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-    
-    {% block body %}
-    {% endblock %}
-  </body>
+</head>
+<body>
+    <!-- HEADER / NAVIGATION -->
+    <header>
+        <nav>
+            <a href="{{ url_for('auth.home') }}" class="logo">MyApp</a>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('auth.home') }}">Home</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                <li><a href="{{ url_for('auth.sign_up') }}">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container" style="padding: 2rem 0;">
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <span>{{ message }}</span>
+                        <button type="button" class="close" onclick="this.parentElement.style.display='none';">×</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- PAGE CONTENT -->
+        {% block body %}
+        {% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div style="text-align: center; padding: 2rem 0;">
+                <p class="footer-copyright">
+                    &copy; 2024 MyApp. All rights reserved. | 
+                    <a href="#">Privacy Policy</a> | 
+                    <a href="#">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optional: Header scroll effect -->
+    <script>
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 0) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
 </html>

@@ -1,25 +1,15 @@
 {% extends "base.html" %}
-{% block title %} Home Page{% endblock %}
-
+{% block title %}Home - MyApp{% endblock %}
 
 {% block body %}
-
-<h1>Home Page</h1>
-
-<div class="sign-div">
-  <a action="/login" href="{{url_for('auth.sign_up') }}">
-    <button class="join-button">
-      Sign Up 
-    </button>
-  </a>
+<div style="text-align: center; padding: 4rem 0;">
+    <h1>Welcome to MyApp</h1>
+    <p style="font-size: 1.125rem; color: var(--color-text-secondary); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+        A modern, secure platform for user authentication and account management.
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('auth.sign_up') }}" class="btn btn-primary btn-lg">Create Account</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-lg">Sign In</a>
+    </div>
 </div>
-
-<div class="log-div">
-  <a action="/login" href="{{url_for('auth.login') }}">
-    <button class="join-button">
-      Login 
-    </button>
-  </a>
-</div>
-
 {% endblock %}
