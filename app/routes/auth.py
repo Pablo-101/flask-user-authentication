@@ -13,6 +13,9 @@ def home():
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+    if "user" in session:
+        flash("You already logged in", "info")
+        return redirect(url_for("auth.dashboard"))
 
     if request.method == "POST":
         username = request.form.get("username")
@@ -22,39 +25,45 @@ def login():
             session["user"] = user.id
             flash("Logged in Successfully!", "success")
             return redirect(url_for("auth.dashboard"))
-        else:
-            flash("Username or Password is Incorrect", "danger")
-            return redirect(url_for("auth.login"))
 
-    else:
-        if "user" in session:
-            flash("You already logged in", "info")
-            return redirect(url_for("auth.dashboard"))
+        flash("Username or Password is Incorrect", "danger")
+        return redirect(url_for("auth.login"))
 
-        return render_template("login.html")
+    return render_template("login.html")
 
 
 @auth_bp.route("/sign_up", methods=["GET", "POST"])
 def sign_up():
+    if "user" in session:
+        flash("You already logged in", "info")
+        return redirect(url_for("auth.dashboard"))
+
     if request.method == "POST":
         username = request.form.get("username")
-        password = generate_password_hash(request.form.get("password"))
+        password = request.form.get("password")
+
+        if not username.strip() or not password.strip():
+            flash(
+                "Username and password cannot be empty or contain only spaces.",
+                "danger",
+            )
+            return redirect(url_for("auth.sign_up"))
+
         user = User.query.filter_by(username=username).first()
-        if not user:
-            user = User(username=username, password=password)
-            db.session.add(user)
-            db.session.commit()
-            session["user"] = user.id
-            flash("Account has been successfully created", "success")
-            return redirect(url_for("auth.dashboard"))
-        else:
+
+        if user:
             flash("Username already exists!", "danger")
             return redirect(url_for("auth.login"))
-    else:
-        if "user" in session:
-            flash("You already logged in", "info")
-            return redirect(url_for("auth.dashboard"))
-        return render_template("sign_up.html")
+
+        passwordhash = generate_password_hash(password)
+        user = User(username=username, password=passwordhash)
+        db.session.add(user)
+        db.session.commit()
+        session["user"] = user.id
+        flash("Account has been successfully created", "success")
+        return redirect(url_for("auth.dashboard"))
+
+    return render_template("sign_up.html")
 
 
 @auth_bp.route("/dashboard")
@@ -75,11 +84,10 @@ def logout():
             flash("Logged Out", "success")
             return redirect(url_for("auth.login"))
 
-        else:
-            return redirect(url_for("auth.dashboard"))
-    else:
-        flash("You already Logged Out", "success")
-        return render_template("home.html")
+        return redirect(url_for("auth.dashboard"))
+
+    flash("You already Logged Out", "success")
+    return render_template("home.html")
 
 
 @auth_bp.route("/delete", methods=["GET", "POST"])
